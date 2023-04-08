@@ -21,8 +21,11 @@ def genre():
 def search():
     film=request.args["nome"]
     mostro=df[df["Title"].str.strip().str.capitalize()==film.strip().capitalize()]
-    dfhtm=mostro.to_html()
-    return render_template('risultato.html', tabella = dfhtm)
+    if mostro.empty:
+        return render_template('errore.html') 
+    else:
+        dfhtm=mostro.to_html()
+        return render_template('risultato.html', tabella = dfhtm)
 
 @app.route('/search_genere', methods = ['GET'])
 def search_genere():
