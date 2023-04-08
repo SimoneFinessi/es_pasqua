@@ -29,6 +29,12 @@ def radio():
     #generi = df.drop_duplicates(subset=['Genres'])
     return render_template('Radio.html', list= list(generi))
 
+@app.route('/check')
+def check():
+    generi = df['Genres'].unique()
+    #generi = df.drop_duplicates(subset=['Genres'])
+    return render_template('Check.html', list= list(generi))
+
 @app.route('/search_nome', methods = ['GET'])
 def search():
     film=request.args["nome"]
@@ -58,6 +64,17 @@ def search_radio():
     film=request.args["genere"]
     genere=df[df["Genres"].str.lower().str.contains(film.strip().lower())]
     dfhtm=genere.to_html()
+    return render_template('risultato.html', tabella = dfhtm)
+
+@app.route('/search_check', methods = ['GET'])
+def search_check():
+    film=request.args.getlist("genere")
+    genre=pd.DataFrame()
+    for i in film:
+        risultato=df[df.Genres.str.contains(i)]
+        genre=genre.append(risultato)
+    
+    dfhtm=genre.to_html()
     return render_template('risultato.html', tabella = dfhtm)
 
 if __name__ == '__main__':

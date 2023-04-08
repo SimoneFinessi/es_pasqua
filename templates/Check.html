@@ -1,0 +1,17 @@
+<html>
+    <head>
+              
+    </head>
+    <body>
+       
+        
+        <form action="/search_check" method = "GET">
+            
+                {% for genere in list %}
+                <input type="checkbox" name="genere" value="{{genere}}">{{genere}}<br>
+                {% endfor %}
+            
+            <p><input type = "submit" value = "Clicca per conoscere i dati" /></p>
+        </form>
+    </body>
+</html>
