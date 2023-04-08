@@ -72,7 +72,7 @@ def search_check():
     genre=pd.DataFrame()
     for i in film:
         risultato=df[df.Genres.str.contains(i)]
-        genre=genre.append(risultato)
+        genre=pd.concat([genre, risultato])
     
     dfhtm=genre.to_html()
     return render_template('risultato.html', tabella = dfhtm)
