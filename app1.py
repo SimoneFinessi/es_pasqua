@@ -13,11 +13,22 @@ def home():
 def nome():
     return render_template('filmInserito.html')
 
+@app.route('/genre')
+def genre():
+    return render_template('genereNome.html')
+
 @app.route('/search_nome', methods = ['GET'])
 def search():
     film=request.args["nome"]
     mostro=df[df["Title"].str.strip().str.capitalize()==film.strip().capitalize()]
     dfhtm=mostro.to_html()
+    return render_template('risultato.html', tabella = dfhtm)
+
+@app.route('/search_genere', methods = ['GET'])
+def search_genere():
+    film=request.args["genere"]
+    genere=df[df["Genres"].str.lower().str.contains(film.strip().lower())]
+    dfhtm=genere.to_html()
     return render_template('risultato.html', tabella = dfhtm)
 
 if __name__ == '__main__':
