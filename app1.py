@@ -23,6 +23,12 @@ def tendina():
     #generi = df.drop_duplicates(subset=['Genres'])
     return render_template('genereTendina.html', list= list(generi))
 
+@app.route('/radio')
+def radio():
+    generi = df['Genres'].unique()
+    #generi = df.drop_duplicates(subset=['Genres'])
+    return render_template('Radio.html', list= list(generi))
+
 @app.route('/search_nome', methods = ['GET'])
 def search():
     film=request.args["nome"]
@@ -46,5 +52,13 @@ def search_tendina():
     genere=df[df["Genres"].str.lower().str.contains(film.strip().lower())]
     dfhtm=genere.to_html()
     return render_template('risultato.html', tabella = dfhtm)
+
+@app.route('/search_Radio', methods = ['GET'])
+def search_radio():
+    film=request.args["genere"]
+    genere=df[df["Genres"].str.lower().str.contains(film.strip().lower())]
+    dfhtm=genere.to_html()
+    return render_template('risultato.html', tabella = dfhtm)
+
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3245, debug=True)
