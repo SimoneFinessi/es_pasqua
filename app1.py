@@ -17,6 +17,12 @@ def nome():
 def genre():
     return render_template('genereNome.html')
 
+@app.route('/tendina')
+def tendina():
+    generi = df['Genres'].unique()
+    #generi = df.drop_duplicates(subset=['Genres'])
+    return render_template('genereTendina.html', list= list(generi))
+
 @app.route('/search_nome', methods = ['GET'])
 def search():
     film=request.args["nome"]
@@ -34,5 +40,11 @@ def search_genere():
     dfhtm=genere.to_html()
     return render_template('risultato.html', tabella = dfhtm)
 
+@app.route('/search_tendina', methods = ['GET'])
+def search_tendina():
+    film=request.args["genere"]
+    genere=df[df["Genres"].str.lower().str.contains(film.strip().lower())]
+    dfhtm=genere.to_html()
+    return render_template('risultato.html', tabella = dfhtm)
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3245, debug=True)

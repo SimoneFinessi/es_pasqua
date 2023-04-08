@@ -1,0 +1,17 @@
+<html>
+    <head>
+              
+    </head>
+    <body>
+       
+        
+        <form action="/search_tendina" method = "GET">
+            <select name="genere">
+                {% for genere in list %}
+                    <option value="{{genere}}">{{genere}}</option> 
+                {% endfor %}
+                </select>
+            <p><input type = "submit" value = "Clicca per conoscere i dati" /></p>
+        </form>
+    </body>
+</html>
