@@ -16,7 +16,7 @@ def nome():
 @app.route('/search_nome', methods = ['GET'])
 def search():
     film=request.args["nome"]
-    mostro=df[df["Title"].str.lower()==film.lower()]
+    mostro=df[df["Title"].str.strip().str.capitalize()==film.strip().capitalize()]
     dfhtm=mostro.to_html()
     return render_template('risultato.html', tabella = dfhtm)
 
