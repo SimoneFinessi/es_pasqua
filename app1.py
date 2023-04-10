@@ -1,5 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 import pandas as pd
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import io
+import mpld3
 
 app = Flask(__name__)
 
@@ -41,6 +48,21 @@ def nan():
     df2=df1.to_html()
     #generi = df.drop_duplicates(subset=['Genres'])
     return render_template('NAN.html', list= df2)
+
+@app.route('/graf')
+def graf():
+    fig, ax= plt.subplots(figsize = (12,8))
+    df.groupby("Genres")["Title"].count().sort_values(ascending=False).reset_index ().plot(kind="bar", ax=ax)
+    graph = mpld3.fig_to_html(fig)#modo diverso dal solito
+    return render_template('grafico.html',graf=graph)
+
+@app.route("/immagine")
+def immagine():
+    fig, ax= plt.subplots(figsize = (12,8))
+    df.groupby("Genres")["Title"].count().sort_values(ascending=False).reset_index ().plot(kind="bar", ax=ax)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)#metodo tradizionale usato in classe
+    return Response(output.getvalue(), mimetype='image/png')
 
 @app.route('/search_nome', methods = ['GET'])
 def search():
