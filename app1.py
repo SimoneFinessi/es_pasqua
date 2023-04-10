@@ -35,6 +35,13 @@ def check():
     #generi = df.drop_duplicates(subset=['Genres'])
     return render_template('Check.html', list= list(generi))
 
+@app.route('/nan')
+def nan():
+    df1=df[df["Budget"].isnull()]
+    df2=df1.to_html()
+    #generi = df.drop_duplicates(subset=['Genres'])
+    return render_template('NAN.html', list= df2)
+
 @app.route('/search_nome', methods = ['GET'])
 def search():
     film=request.args["nome"]
