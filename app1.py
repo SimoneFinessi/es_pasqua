@@ -26,19 +26,19 @@ def genre():
 #es3
 @app.route('/tendina')
 def tendina():
-    generi = df['Genres'].unique()
+    generi =list(set(df[~df['Genres'].str.contains('\|')]['Genres']))
     #generi = df.drop_duplicates(subset=['Genres'])
     return render_template('genereTendina.html', list= list(generi))
 #es4
 @app.route('/radio')
 def radio():
-    generi = df['Genres'].unique()
+    generi =list(set(df[~df['Genres'].str.contains('\|')]['Genres']))
     #generi = df.drop_duplicates(subset=['Genres'])
     return render_template('Radio.html', list= list(generi))
 #es5
 @app.route('/check')
 def check():
-    generi = df['Genres'].unique()
+    generi =list(set(df[~df['Genres'].str.contains('\|')]['Genres']))
     #generi = df.drop_duplicates(subset=['Genres'])
     return render_template('Check.html', list= list(generi))
 #es6
@@ -51,15 +51,19 @@ def nan():
 #es7 variante 1
 @app.route('/graf')
 def graf():
+    dfgraf=df.groupby("Language").count()[["Title"]].sort_values(by="Title",ascending=False).reset_index()
     fig, ax= plt.subplots(figsize = (12,8))
-    df.groupby("Genres")["Title"].count().sort_values(ascending=False).reset_index ().plot(kind="bar", ax=ax)
+    ax.bar(dfgraf["Language"],dfgraf["Title"])
     graph = mpld3.fig_to_html(fig)#modo diverso dal solito
     return render_template('grafico.html',graf=graph)
+
 #es7 variante 2
 @app.route("/immagine")
 def immagine():
-    fig, ax= plt.subplots(figsize = (12,8))
-    df.groupby("Genres")["Title"].count().sort_values(ascending=False).reset_index ().plot(kind="bar", ax=ax)
+    dfgraf=df.groupby("Language").count()[["Title"]].sort_values(by="Title",ascending=False).reset_index()
+    fig, ax= plt.subplots(figsize = (20,8))
+    ax.bar(dfgraf["Language"],dfgraf["Title"])
+    plt.xticks(rotation=90)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)#metodo tradizionale usato in classe
     return Response(output.getvalue(), mimetype='image/png')
